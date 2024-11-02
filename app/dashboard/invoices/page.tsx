@@ -14,10 +14,9 @@ interface IProps {
 export default async function Page(props: IProps) {
 	const searchParams = await props.searchParams;
 	const query = searchParams?.query || '';
-	const currentPage = Number(searchParams?.page);
+	const currentPage = Number(searchParams?.page || 1);
 
 	const totalPages = await fetchInvoicesPages(query);
-	console.log({ totalPages });
 
 	return (
 		<div className='w-full'>
