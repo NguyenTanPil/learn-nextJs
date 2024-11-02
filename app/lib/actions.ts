@@ -1,32 +1,13 @@
 'use server';
 
+import { FormState, State } from '@/app/lib/definitions';
+import { FormSchema, SignupFormSchema } from '@/app/lib/validations';
 import { signIn } from '@/auth';
 import { sql } from '@vercel/postgres';
+import bcrypt from 'bcrypt';
 import { AuthError } from 'next-auth';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
-import { z } from 'zod';
-
-const FormSchema = z.object({
-	id: z.string(),
-	customerId: z.string({
-		invalid_type_error: 'Please select a customer',
-	}),
-	amount: z.coerce.number().gt(0, { message: 'Please enter an amount greater than $0' }),
-	status: z.enum(['pending', 'paid'], {
-		invalid_type_error: 'Please select an invoice status',
-	}),
-	date: z.string(),
-});
-
-export type State = {
-	errors?: {
-		customerId?: string[];
-		amount?: string[];
-		status?: string[];
-	};
-	message?: string | null;
-};
 
 const CreateInvoices = FormSchema.omit({ id: true, date: true });
 
@@ -122,3 +103,32 @@ export async function authenticate(prevState: string | undefined, formData: Form
 		throw error;
 	}
 }
+
+export const signup = async (preState: FormState, formData: FormData) => {
+	const validatedFields = SignupFormSchema.safeParse({
+		name: formData.get('name'),
+		email: formData.get('email'),
+		password: formData.get('password'),
+	});
+
+	if (!validatedFields.success) {
+		return {
+			errors: validatedFields.error.flatten().fieldErrors,
+		};
+	}
+
+	const { name, email, password } = validatedFields.data;
+	const hashedPassword = await bcrypt.hash(password, 10);
+	console.log({ name, email, hashedPassword });
+
+	// create new user
+	const data: string[] = [];
+
+	const user = data[0];
+
+	if (!user) {
+		return {
+			message: 'An error occurred while creating your account.',
+		};
+	}
+};
