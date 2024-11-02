@@ -17,6 +17,7 @@ const links = [
 	{ name: 'Customers', href: '/dashboard/customers', icon: UserGroupIcon },
 	{ name: 'Videos', href: '/dashboard/videos', icon: UserGroupIcon },
 	{ name: 'Authentication', href: '/dashboard/auth', icon: UserGroupIcon },
+	{ name: 'Data Fetching', href: '/dashboard/data-fetching', icon: UserGroupIcon },
 ];
 
 export default function NavLinks() {
