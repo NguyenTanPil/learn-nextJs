@@ -1,5 +1,5 @@
+import { roboto_mono } from '@/app/ui/fonts';
 import '@/app/ui/global.css';
-import { inter } from '@/app/ui/fonts';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
 	return (
 		<html lang='en'>
-			<body className={`${inter.className} antialiased`}>{children}</body>
+			<body className={`${roboto_mono.className} antialiased`}>{children}</body>
 		</html>
 	);
 }
